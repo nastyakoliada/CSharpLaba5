@@ -1,0 +1,51 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm1="using: MusicCatalog.UI.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+        xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+        xmlns:views="clr-namespace:MusicCatalog.UI.Views"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="MusicCatalog.UI.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Музыкальный каталог"
+        SizeToContent="Width"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True"
+        WindowStartupLocation="CenterScreen" >
+  <i:Interaction.Behaviors>
+    <ia:EventTriggerBehavior EventName="Closing">
+      <ia:InvokeCommandAction  Command="{Binding AppClosing}"/>
+    </ia:EventTriggerBehavior>
+  </i:Interaction.Behaviors>
+  <Panel>
+    <ExperimentalAcrylicBorder IsHitTestVisible="False">
+      <ExperimentalAcrylicBorder.Material>
+        <ExperimentalAcrylicMaterial
+            BackgroundSource="Digger"
+            TintColor="Black"
+            TintOpacity="1"
+            MaterialOpacity="0.65" />
+      </ExperimentalAcrylicBorder.Material>
+    </ExperimentalAcrylicBorder>
+
+    <DockPanel>
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
+      <ComboBox SelectedIndex="0" MaxDropDownHeight="120" Margin="2" SelectionChanged="CatalogTypeChanged"
+                SelectedItem="{Binding CatalogType,Mode=OneWayToSource}">
+        <ComboBoxItem>WebService</ComboBoxItem>
+        <ComboBoxItem>SQLite</ComboBoxItem>
+        <ComboBoxItem>Файл JSON</ComboBoxItem>
+        <ComboBoxItem>Файл XML</ComboBoxItem>
+      </ComboBox>
+      <TextBox Margin="2" Watermark="Имя каталога или путь к сервису..."
+               VerticalAlignment="Center" MinWidth="260" Text="{Binding CatalogName}"/>
+      <Button Margin="2" VerticalAlignment="Center" Command="{Binding ConnectTo}">Подключить</Button>
+    </StackPanel>
+    <views:MainView />
+  </DockPanel>
+  </Panel>
+        
+</Window>
