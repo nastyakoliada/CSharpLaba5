@@ -1,0 +1,45 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:vm="clr-namespace:MusicCatalog.UI.ViewModels"
+        x:Class="MusicCatalog.UI.Views.CompositionWindow"
+        x:DataType="vm:CompositionViewModel"
+          SizeToContent="WidthAndHeight"
+        Title="Данные композиции"
+        TransparencyLevelHint="AcrylicBlur"
+        ExtendClientAreaToDecorationsHint="True"
+        x:Name="EDDB"
+        WindowStartupLocation="CenterOwner">
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:CompositionViewModel Author="Глюкоза" SongName="Моя невеста" Number="165" />
+  </Design.DataContext>  
+  <Panel>
+    <ExperimentalAcrylicBorder IsHitTestVisible="False">
+      <ExperimentalAcrylicBorder.Material>
+        <ExperimentalAcrylicMaterial
+            BackgroundSource="Digger"
+            TintColor="Black"
+            TintOpacity="1"
+            MaterialOpacity="0.65" />
+      </ExperimentalAcrylicBorder.Material>
+    </ExperimentalAcrylicBorder>
+    <StackPanel Margin="40">
+      <Grid ColumnDefinitions="Auto, Auto" RowDefinitions="Auto, Auto, Auto">
+        <TextBlock Text="Автор" Grid.Row="0" Grid.Column="0" Margin="2" VerticalAlignment="Center"/>
+        <TextBlock Text="Композиция" Grid.Row="1" Grid.Column="0" Margin="2" VerticalAlignment="Center"/>
+        <TextBlock Text="Номер в каталоге" Grid.Row="2" Grid.Column="0" Margin="2" VerticalAlignment="Center"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Author}" Margin="2" MinWidth="250"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding SongName}" Margin="2"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Number}" Margin="2" IsReadOnly="True"/>
+      </Grid>
+      <StackPanel Margin="40" Orientation="Horizontal" HorizontalAlignment="Center">
+        <Button Margin="2" Command="{Binding SaveNewCompositionCommand}">Сохранить</Button>
+        <Button Margin="2"  Click="OnCancel">Отменить</Button>
+      </StackPanel>
+    </StackPanel>
+  </Panel>
+</Window>

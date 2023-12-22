@@ -1,0 +1,76 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"            
+             xmlns:vm="clr-namespace:MusicCatalog.UI.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="MusicCatalog.UI.Views.MainView"
+             x:DataType="vm:MusicCatalogViewModel">
+  <!--xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"-->
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:MusicCatalogViewModel>
+      <vm:MusicCatalogViewModel.Compositions>
+        <vm:CompositionViewModel Author="Beth Hard" SongName="I'll Take Care of You" Number="3"/>
+        <vm:CompositionViewModel Author="Beth Hard" SongName="Fire On The Floor" Number="1"/>
+        <vm:CompositionViewModel Author="Ari Hicks" SongName="Cold War" Number="2"/>
+      </vm:MusicCatalogViewModel.Compositions>
+    </vm:MusicCatalogViewModel>
+  </Design.DataContext>
+  <!--<i:Interaction.Behaviors>
+    <ia:EventTriggerBehavior EventName="Closing" SourceObject="ChangeProperty">
+      <ia:InvokeCommandAction  Command="{Binding CloseApplicationCommand}"/>
+    </ia:EventTriggerBehavior>
+  </i:Interaction.Behaviors>-->
+  <DockPanel Margin="40">
+    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
+      <Button Margin="2" ToolTip.Tip="Добавить композицию" Command="{Binding AddCompositionCommand}"
+            IsEnabled="{Binding ConnectedMusicCatalog,Converter={x:Static ObjectConverters.IsNotNull}}"  >
+        <PathIcon Data="{StaticResource collections_add_regular}" />
+      </Button>
+      <Button IsEnabled="{Binding ElementName=SongList, Path=SelectedItem,Converter={x:Static ObjectConverters.IsNotNull}}"
+        Margin="2" ToolTip.Tip="Редактировать композицию" Command="{Binding EditCompositionCommand}">
+        <PathIcon Data="{StaticResource edit_regular}" />
+      </Button>
+      <Button Margin="2" ToolTip.Tip="Удалить композицию" Command="{Binding DeleteCompositionCommand}"
+              IsEnabled="{Binding ElementName=SongList, Path=SelectedItem,Converter={x:Static ObjectConverters.IsNotNull}}">
+        <PathIcon Data="{StaticResource delete_regular}" />
+      </Button>      
+    </StackPanel>
+  <Grid HorizontalAlignment="Center" ColumnDefinitions="Auto" RowDefinitions="*, Auto">
+    <DataGrid x:Name="SongList" Grid.Row="0" ItemsSource="{Binding Compositions}" IsReadOnly="True"
+              BorderBrush="Gray" BorderThickness="2" SelectedItem="{Binding SelectedComposition}"
+              HorizontalAlignment="Center" GridLinesVisibility="All">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Автор" Binding="{Binding Author}"/>
+        <DataGridTextColumn Header="Название песни" Binding="{Binding SongName}"/>
+        <DataGridTextColumn Header="Номер в каталоге" Binding="{Binding Number}"/>
+      </DataGrid.Columns>      
+    </DataGrid>
+    <StackPanel Grid.Row="1" Orientation="Horizontal">
+    <Button x:Name="btnFilter" Content="Фильтр" Margin="2" ToolTip.Tip="Фильтр">
+      <PathIcon Data="{StaticResource filter_regular}" />      
+      <Button.Flyout >
+        <Flyout Placement="RightEdgeAlignedTop">
+          <StackPanel Orientation="Horizontal">
+            <ComboBox Name="Filter" MaxDropDownHeight="120" Margin="2"  SelectedIndex="0" 
+                      SelectedItem="{Binding SelectedFilterType,Mode=OneWayToSource}">
+              <ComboBoxItem DataContext="0">Без фильтра</ComboBoxItem>
+              <ComboBoxItem DataContext="1">По автору</ComboBoxItem>
+              <ComboBoxItem DataContext="2">По названию песни</ComboBoxItem>
+              <ComboBoxItem DataContext="3">Везде</ComboBoxItem>
+            </ComboBox>
+            <TextBox Margin="2" Width="150" Text="{Binding FilterString}"/>
+            <Button Margin="2" Click="OnFilterSet" Command="{Binding ApplyFilter}">Применить</Button>            
+          </StackPanel>
+          </Flyout>
+      </Button.Flyout>
+    </Button>
+      <TextBlock Margin="2" VerticalAlignment="Center" Text="{Binding SelectedFilterType.Content,Mode=OneWay}"/>
+      <TextBlock Margin="2" VerticalAlignment="Center"  Text="{Binding FilterString,Mode=OneWay}"/>
+    </StackPanel>
+  </Grid>
+    </DockPanel>
+</UserControl>
